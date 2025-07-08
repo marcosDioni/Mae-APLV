@@ -40,4 +40,70 @@
     }
     .duvida {
       background: #fff3cd;
-      c
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+  <h1>Verificador APLV</h1>
+  <input type="text" id="alimento" placeholder="Digite o nome do alimento" />
+  <button onclick="verificarAlimento()">Verificar</button>
+  <div id="resultado"></div>
+
+  <script>
+    function verificarAlimento() {
+      const bancoAlimentos = {
+        "leite ninho": "perigoso",
+        "danoninho": "perigoso",
+        "iogurte natural": "perigoso",
+        "biscoito maisena": "seguro",
+        "banana": "seguro",
+        "maçã": "seguro",
+        "bolo de chocolate": "duvida"
+      };
+      const entrada = document.getElementById("alimento").value.trim().toLowerCase();
+      const resultado = document.getElementById("resultado");
+      const status = bancoAlimentos[entrada];
+
+      resultado.className = "";
+      if (status === "seguro") {
+        resultado.textContent = "✅ Este alimento é seguro para APLV.";
+        resultado.classList.add("seguro");
+      } else if (status === "perigoso") {
+        resultado.textContent = "❌ Este alimento contém leite ou derivados.";
+        resultado.classList.add("perigoso");
+      } else if (status === "duvida") {
+        resultado.textContent = "⚠️ Verifique o rótulo: este alimento pode conter traços de leite.";
+        resultado.classList.add("duvida");
+      } else {
+        resultado.textContent = "🤔 Alimento não encontrado. Verifique o nome ou consulte o rótulo.";
+        resultado.classList.add("duvida");
+      }
+    }
+
+    // Service Worker + Notificação de nova versão
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').then(reg => {
+        console.log('Service Worker registrado.');
+
+        reg.onupdatefound = () => {
+          const newWorker = reg.installing;
+          newWorker.onstatechange = () => {
+            if (newWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                const banner = document.createElement('div');
+                banner.textContent = '🚀 Nova versão disponível! Clique aqui para atualizar.';
+                banner.style.cssText = 'position: fixed; bottom: 0; left: 0; right: 0; background: #4CAF50; color: white; padding: 10px; text-align: center; font-weight: bold; cursor: pointer; z-index: 9999;';
+                banner.onclick = () => window.location.reload();
+                document.body.appendChild(banner);
+              }
+            }
+          };
+        };
+      }).catch(err => {
+        console.error('Erro ao registrar Service Worker:', err);
+      });
+    }
+  </script>
+</body>
+</html>
