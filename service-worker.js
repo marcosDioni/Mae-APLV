@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aplv-cache-v4'; // Mude o número para forçar atualização
+const CACHE_NAME = 'aplv-cache-v5'; // Mude o número para forçar atualização
 const FILES_TO_CACHE = [
   './',
   './index.html',
